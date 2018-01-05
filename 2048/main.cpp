@@ -18,7 +18,8 @@ int const GAME_OVER = 1;
 int const GAME_WIN = 2;
 int const GAME_CONTINUE = 3;
 
-int Input() {
+int Input() // detect inputs(up down left right) from the keyboard
+{
 	int up_key = 0;
 	int down_key = 0;
 	int left_key = 0;
@@ -54,12 +55,15 @@ int Input() {
 	return direction;
 }
 
-int Judge() {
+int Judge() // judge the game state, continue or win or lose
+{
 	int game_state = GAME_OVER;
 	for (int i = 0; i != ROW; i++) {
 		for (int j = 0; j != COL; j++) {
-			if (board[i][j] == 2048)
+			if (board[i][j] == 2048) {
 				game_state = GAME_WIN;
+				break;
+			}
 			if (board[i][j] == 0)
 				game_state = GAME_CONTINUE;
 			if (i > 0) {
@@ -78,10 +82,12 @@ int Judge() {
 	return game_state;
 }
 
-void Print()
+void Print()//print numbers and game board in the cmd window
 {
 	system("cls");
 	cout << endl;
+	cout << "---------------2048--------------" << endl;
+	cout << "use UP DOWN LEFT RIGHT key to play :)" << endl;
 	for (int i = 0; i < ROW; ++i)
 	{
 		cout << "---------------------------------" << endl;
@@ -101,7 +107,8 @@ void Print()
 	cout << "---------------------------------" << endl;
 }
 
-void Num_generator() {
+void Num_generator() // generator new numbers in the game board
+{
 	int i = 0;
 	int j = 0;
 	do {
@@ -112,7 +119,10 @@ void Num_generator() {
 	board[i][j] = 2 * num_base;
 }
 
-void Process(int direction) {
+void Process(int direction) 
+// input: direction from Input() function
+// do: move numbers following the direction to the aimed position in the game board
+{
 	switch (direction)
 	{
 	case UP:
@@ -123,14 +133,10 @@ void Process(int direction) {
 					board[i - 1][j] = board[i][j];
 					board[i][j] = 0;
 				}
-				else
+				else if (board[i - 1][j] == board[i][j])
 				{
-
-					if (board[i - 1][j] == board[i][j])
-					{
-						board[i - 1][j] *= 2;
-						board[i][j] = 0;
-					}
+					board[i - 1][j] *= 2;
+					board[i][j] = 0;
 				}
 			}
 		}
@@ -143,14 +149,10 @@ void Process(int direction) {
 					board[i + 1][j] = board[i][j];
 					board[i][j] = 0;
 				}
-				else
+				else if (board[i + 1][j] == board[i][j])
 				{
-
-					if (board[i + 1][j] == board[i][j])
-					{
-						board[i + 1][j] *= 2;
-						board[i][j] = 0;
-					}
+					board[i + 1][j] *= 2;
+					board[i][j] = 0;
 				}
 			}
 		}
@@ -163,14 +165,11 @@ void Process(int direction) {
 					board[j][i - 1] = board[j][i];
 					board[j][i] = 0;
 				}
-				else
+				else if(board[j][i - 1] == board[j][i])
 				{
-
-					if (board[j][i - 1] == board[j][i])
-					{
-						board[j][i - 1] *= 2;
-						board[j][i] = 0;
-					}
+					board[j][i - 1] *= 2;
+					board[j][i] = 0;
+				
 				}
 			}
 		}
@@ -183,14 +182,10 @@ void Process(int direction) {
 					board[j][i + 1] = board[j][i];
 					board[j][i] = 0;
 				}
-				else
+				else if (board[j][i + 1] == board[j][i])
 				{
-
-					if (board[j][i + 1] == board[j][i])
-					{
-						board[j][i + 1] *= 2;
-						board[j][i] = 0;
-					}
+					board[j][i + 1] *= 2;
+					board[j][i] = 0;
 				}
 			}
 		}
@@ -218,7 +213,7 @@ int main()
 			Process(direction);
 			Num_generator();
 			Print();
-			Sleep(100);
+			Sleep(200);
 		}
 		else if (gameState == GAME_WIN)
 		{
